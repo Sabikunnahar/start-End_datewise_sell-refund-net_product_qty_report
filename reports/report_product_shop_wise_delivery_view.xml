@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="product_shop_wise_delivery">
+        <t t-call="report.internal_layout"/>
+        <div class="page">
+            <center>
+                <h1>Store wise product delivery report</h1>
+            </center>
+            <br/>
+            <div>
+                <div style="float:Left;">
+                    <b>Start Date:</b>
+                    <span t-esc="start_date"/>
+                </div>
+                <div style="float:right;">
+                    <b>End date:</b>
+                    <span t-esc="end_date"/>
+                </div>
+            </div>
+            <br/>
+            <div style="float:Left;">
+                <b>Store Name:</b>
+                <span t-esc="shop_name"/>
+            </div>
+            <div style="float:right;">
+                <b>Printing Date:</b>
+                <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+            </div>
+            <br/>
+            <center>
+                <h3>Delivered products</h3>
+            </center>
+            <t t-set="c_qty" t-value="0"></t>
+            <t t-set="c_unit" t-value="0"></t>
+            <t t-set="c_tunit" t-value="0"></t>
+            <t t-set="c_cost" t-value="0"></t>
+            <t t-set="c_tcost" t-value="0"></t>
+            <t t-set="c_profit" t-value="0"></t>
+            <center>
+                <table class="table table-condensed" style="border: 1px solid black;">
+                    <thead>
+                        <tr style="border: 1px solid black;">
+                            <th style="border: 1px solid black;">Sl No.</th>
+                            <th style="border: 1px solid black;">Product Name</th>
+                            <th style="border: 1px solid black;">Delivered Quantity</th>
+                            <th style="border: 1px solid black;">Unit price</th>
+                            <th style="border: 1px solid black;">Total Price</th>
+                            <th style="border: 1px solid black;">Cost Price</th>
+                            <th style="border: 1px solid black;">Total Cost</th>
+                            <th style="border: 1px solid black;">Profit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="order_line" t-as="line">
+                            <td style="border: 1px solid black;">
+                                <span t-esc="line_index+1"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="line['name']"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="line['quantity']"/>
+                                <t t-set="c_qty" t-value="c_qty+line['quantity']"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="line['unit_price']"/>
+                                <t t-set="c_unit" t-value="c_unit+line['unit_price']"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="line['total_unit_price']"/>
+                                <t t-set="c_tunit" t-value="c_tunit+line['total_unit_price']"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="line['cost_price']"/>
+                                <t t-set="c_cost" t-value="c_cost+line['cost_price']"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="line['total_cost_price']"/>
+                                <t t-set="c_tcost" t-value="c_tcost+line['total_cost_price']"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="line['total_benefit']"/>
+                                <t t-set="c_profit" t-value="c_profit+line['total_benefit']"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;">
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>Total :</b>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>
+                                    <span t-esc="c_qty"/>
+                                </b>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>
+                                    <span t-esc="c_unit"/>
+                                </b>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>
+                                    <span t-esc="c_tunit"/>
+                                </b>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>
+                                    <span t-esc="c_cost"/>
+                                </b>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>
+                                    <span t-esc="c_tcost"/>
+                                </b>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>
+                                    <span t-esc="c_profit"/>
+                                </b>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </center>
+            <br/>
+            <br/>
+            <center>
+                <h3>Returned products</h3>
+            </center>
+            <center>
+                <table class="table table-condensed" style="border: 1px solid black;">
+                    <thead>
+                        <tr style="border: 1px solid black;">
+                            <th style="border: 1px solid black;">Sl No.</th>
+                            <th style="border: 1px solid black;">Product Name</th>
+                            <th style="border: 1px solid black;">Returned Quantity</th>
+                            <th style="border: 1px solid black;">Unit price</th>
+                            <th style="border: 1px solid black;">Total price</th>
+                            <th style="border: 1px solid black;">Cost price</th>
+                            <th style="border: 1px solid black;">Total Cost</th>
+                            <th style="border: 1px solid black;">Profit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="r_qty" t-value="0"></t>
+                        <t t-set="r_unit" t-value="0"></t>
+                        <t t-set="r_tunit" t-value="0"></t>
+                        <t t-set="r_cost" t-value="0"></t>
+                        <t t-set="r_tcost" t-value="0"></t>
+                        <t t-set="r_profit" t-value="0"></t>
+                        <tr t-foreach="refund_order_line" t-as="lines">
+                            <td style="border: 1px solid black;">
+                                <span t-esc="lines_index+1"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="lines['name']"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="lines['quantity']"/>
+                                <t t-set="r_qty" t-value="r_qty+lines['quantity']"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="lines['unit_price']"/>
+                                <t t-set="r_unit" t-value="r_unit+lines['unit_price']"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="lines['refund_total_unit_price']"/>
+                                <t t-set="r_tunit" t-value="r_tunit+lines['refund_total_unit_price']"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="lines['refund_cost_price']"/>
+                                <t t-set="r_cost" t-value="r_cost+lines['refund_cost_price']"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="lines['refund_total_cost_price']"/>
+                                <t t-set="r_tcost" t-value="r_tcost+lines['refund_total_cost_price']"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="lines['refund_total_benefit']"/>
+                                <t t-set="r_profit" t-value="r_profit+lines['refund_total_benefit']"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;">
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>Total :</b>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>
+                                    <span t-esc="r_qty"/>
+                                </b>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>
+                                    <span t-esc="r_unit"/>
+                                </b>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>
+                                    <span t-esc="r_tunit"/>
+                                </b>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>
+                                    <span t-esc="r_cost"/>
+                                </b>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>
+                                    <span t-esc="r_tcost"/>
+                                </b>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>
+                                    <span t-esc="r_profit"/>
+                                </b>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </center>
+            <br/>
+            <br/>
+            <center>
+                <h3>Net Delivered products</h3>
+            </center>
+            <center>
+                <table class="table table-condensed" style="border: 1px solid black;">
+                    <thead>
+                        <tr style="border: 1px solid black;">
+                            <th style="border: 1px solid black;">Sl No.</th>
+                            <th style="border: 1px solid black;">Product Name</th>
+                            <th style="border: 1px solid black;">Delivered Quantity</th>
+                            <th style="border: 1px solid black;">Unit price</th>
+                            <th style="border: 1px solid black;">Total Price</th>
+                            <th style="border: 1px solid black;">Cost Price</th>
+                            <th style="border: 1px solid black;">Total Cost</th>
+                            <th style="border: 1px solid black;">Profit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="n_qty" t-value="0"></t>
+                        <t t-set="n_unit" t-value="0"></t>
+                        <t t-set="n_tunit" t-value="0"></t>
+                        <t t-set="n_cost" t-value="0"></t>
+                        <t t-set="n_tcost" t-value="0"></t>
+                        <t t-set="n_profit" t-value="0"></t>
+                        <tr t-foreach="net_data" t-as="lines">
+                            <td style="border: 1px solid black;">
+                                <span t-esc="lines_index+1"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="lines['name']"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="lines['total_net_quantity']"/>
+                                <t t-set="n_qty" t-value="n_qty+lines['total_net_quantity']"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="lines['net_unit_price']"/>
+                                <t t-set="n_unit" t-value="n_unit+lines['net_unit_price']"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="lines['net_total_unit_price']"/>
+                                <t t-set="n_tunit" t-value="n_tunit+lines['net_total_unit_price']"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="lines['net_cost_price']"/>
+                                <t t-set="n_cost" t-value="n_cost+lines['net_cost_price']"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="lines['net_total_cost']"/>
+                                <t t-set="n_tcost" t-value="n_tcost+lines['net_total_cost']"/>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <span t-esc="lines['net_total_benefit']"/>
+                                <t t-set="n_profit" t-value="n_profit+lines['net_total_benefit']"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid black;">
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>Total :</b>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>
+                                    <span t-esc="n_qty"/>
+                                </b>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>
+                                    <span t-esc="n_unit"/>
+                                </b>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>
+                                    <span t-esc="n_tunit"/>
+                                </b>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>
+                                    <span t-esc="n_cost"/>
+                                </b>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>
+                                    <span t-esc="n_tcost"/>
+                                </b>
+                            </td>
+                            <td style="border: 1px solid black;">
+                                <b>
+                                    <span t-esc="n_profit"/>
+                                </b>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </center>
+        </div>
+    </template>
+</odoo>

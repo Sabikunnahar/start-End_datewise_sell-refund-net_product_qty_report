@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <report
+            id="action_report_product_delivery"
+            string="Shop Wise Product Delivery Report"
+            model="wizard.product.delivery"
+            report_type="qweb-pdf"
+            file="product_delivery_report.product_shop_wise_delivery"
+            name="product_delivery_report.product_shop_wise_delivery"
+    />
+</odoo>
